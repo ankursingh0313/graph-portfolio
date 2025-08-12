@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import NavBarNew from "./widgets/NavBarNew";
+import BackgroundGrid from "./components/BackgroundGrid";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,12 +24,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const containerHeight = 3200; // Taller for home page
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full h-screen relative overflow-hidden`}
+        style={{
+          backgroundColor: "#f0f0f0",
+          backgroundImage: `
+            linear-gradient(to right, #e5e7eb 1px, transparent 1px),
+            linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)
+          `,
+          backgroundSize: "20px 20px",
+        }}
       >
-        {children}
+        <BackgroundGrid>
+          <NavBarNew />
+          {children}
+        </BackgroundGrid>
       </body>
     </html>
   );
