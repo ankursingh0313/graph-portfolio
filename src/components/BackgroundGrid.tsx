@@ -14,21 +14,26 @@ export default function BackgroundGrid({
     const rect = overlayRef.current?.getBoundingClientRect();
     if (!rect) return;
 
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+    // 🧮 Compute center using scroll position too
+    const scrollX = window.scrollX || document.documentElement.scrollLeft;
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+
+    const centerX = rect.left + scrollX + rect.width / 2;
+    const centerY = rect.top + scrollY + rect.height / 2;
 
     setCenter({ x: centerX, y: centerY });
 
+    // 🧭 Mouse position relative to the document (not just viewport)
     setMousePos({
-      x: e.clientX,
-      y: e.clientY,
+      x: e.clientX + scrollX,
+      y: e.clientY + scrollY,
     });
   };
 
-  // Compute relative position for display (optional)
+  // Compute relative position (center = 0,0)
   const relPos = {
     x: Math.round(mousePos.x - center.x),
-    y: Math.round(center.y - mousePos.y), // y inverted
+    y: Math.round(center.y - mousePos.y),
   };
 
   return (
@@ -47,13 +52,13 @@ export default function BackgroundGrid({
     >
       {children}
 
-      {/* Horizontal line at mouse Y */}
+      {/* Horizontal guide line */}
       <div
         style={{
-          position: "fixed",
+          position: "absolute",
           top: mousePos.y,
           left: 0,
-          width: "100vw",
+          width: "100%",
           height: 1,
           backgroundColor: "#48aa6a55",
           pointerEvents: "none",
@@ -62,13 +67,13 @@ export default function BackgroundGrid({
         }}
       />
 
-      {/* Vertical line at mouse X */}
+      {/* Vertical guide line */}
       <div
         style={{
-          position: "fixed",
+          position: "absolute",
           left: mousePos.x,
           top: 0,
-          height: "100vh",
+          height: "100%",
           width: 1,
           backgroundColor: "#48aa6a55",
           pointerEvents: "none",
@@ -77,7 +82,7 @@ export default function BackgroundGrid({
         }}
       />
 
-      {/* Coordinates display */}
+      {/* Coordinate display */}
       <div
         style={{
           position: "fixed",

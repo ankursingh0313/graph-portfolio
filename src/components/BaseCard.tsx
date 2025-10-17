@@ -55,16 +55,27 @@ export default function BaseCard({
     registerCard(id);
   }, [id, registerCard]);
 
+  const expandBodyHeight = (bottom: number) => {
+    const currentHeight = document.body.scrollHeight;
+    if (bottom > currentHeight - 100) {
+      document.body.style.minHeight = `${bottom + 200}px`;
+    }
+  };
+
   return (
     <Rnd
       default={{ x, y, width, height }}
       minWidth={minWidth}
       minHeight={minHeight}
-      bounds="window"
+      onDrag={(e, d) => expandBodyHeight(d.y + height)}
+      onResize={(e, direction, ref, delta, position) =>
+        expandBodyHeight(position.y + ref.offsetHeight)
+      }
       style={{ zIndex: getZIndex(id), transition: "z-index 0.1s" }}
       className={`absolute ${colorClass} border-2 rounded-lg shadow-lg backdrop-blur-sm ${className}`}
     >
       <div className="relative h-full w-full p-4 pt-1 flex flex-col">
+        {/* Controls */}
         <div className="flex justify-between items-center">
           <div></div>
           <div className="flex gap-1">
@@ -91,16 +102,11 @@ export default function BaseCard({
           </h3>
         )}
 
-        <div
-          className={`flex flex-col flex-grow text-lg ${scroll ? "overflow-auto" : "overflow-hidden"
-            }`}
-        >
+        <div className={`flex flex-col flex-grow ${scroll ? "overflow-auto" : "overflow-hidden"}`}>
           {children}
         </div>
 
-        <div className="text-xs text-gray-500 mt-2 text-right select-none">
-          Drag & Resize
-        </div>
+        <div className="text-xs text-gray-500 mt-2 text-right select-none">Drag & Resize</div>
         <div className="text-gray-500/50 absolute bottom-0 right-0">
           <ArrowDownRight size={16} />
         </div>

@@ -12,6 +12,7 @@ import ImageCard from "@/components/widgets/ImageCard";
 import ContactCard from "@/components/widgets/ContactCard";
 import ListCard from "@/components/widgets/ListCard";
 import { LayerProvider } from "@/customContext/LayerContext";
+import SmartCard from "@/components/widgets/SmartCard";
 const iconMap = {
   twitter: Twitter,
   facebook: Facebook,
@@ -151,6 +152,31 @@ export default function Home() {
         handleLinkClick={handleLinkClick}
         ExternalLink={ExternalLinkIcon}
       />
+      <SmartCard
+        x={540}
+        y={1174}
+        height={240}
+        width={300}
+        type="social"
+        color="lime"
+        title="Socials"
+        links={[
+          {
+            platform: "twitter",
+            label: "My Twitter",
+            url: "https://twitter.com/myprofile",
+          },
+          {
+            platform: "facebook",
+            label: "Facebook Page",
+            url: "https://facebook.com/myprofile",
+          },
+          {
+            platform: "github",
+            label: "GitHub Repo",
+            url: "https://github.com/myrepo",
+          },
+        ]} />
 
       <ContactCard
         x={873}
@@ -161,6 +187,15 @@ export default function Home() {
         title="Get in Touch"
         placeholder="We’re here to help!"
       />
+      <SmartCard
+        x={873}
+        y={1174}
+        height={460}
+        width={360}
+        type="contact"
+        color="gray"
+        title="Get in Touch"
+        placeholder="We’re here to help!" />
     </LayerProvider>
   );
 }
