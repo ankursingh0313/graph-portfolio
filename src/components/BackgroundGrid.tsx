@@ -35,7 +35,7 @@ export default function BackgroundGrid({
     <div
       ref={overlayRef}
       onMouseMove={handleMouseMove}
-      className="w-full h-screen relative cursor-crosshair"
+      className="w-full min-h-screen relative cursor-crosshair"
       style={{
         backgroundColor: "#f0f0f000",
         backgroundImage: `

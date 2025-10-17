@@ -73,7 +73,7 @@ export default function LordVisnuTribute({
             background: "radial-gradient(ellipse at center, #ccc8, #ccc0);",
           }}
         />
-        <span className="font-semibold self-center text-2xl">
+        <span className="font-semibold self-center text-sm">
           ॐ नमो भगवते वासुदेवाय नमः
         </span>
 

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Rnd } from "react-rnd";
 import { Menu, RotateCcw } from "lucide-react";
 import LordVisnuTribute from "./LordVisnuTribute";
+import Link from "next/link";
 
 interface Position {
   x: number;
@@ -11,19 +12,29 @@ interface Position {
 }
 
 const navItems = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "projects", label: "Projects" },
-  { id: "technologies", label: "Tech" },
-  { id: "contact", label: "Contact" },
+  { id: "home", label: "Home", href: "/" },
+  { id: "about", label: "About", href: "/about" },
+  { id: "projects", label: "Projects", href: "/projects" },
+  { id: "technologies", label: "Tech", href: "/technologies" },
+  { id: "contact", label: "Contact", href: "/contact" },
 ];
-
+const place = {
+  x: 365,
+  y: 30,
+};
 export default function NavBar() {
-  const [navbarPos, setNavbarPos] = useState<Position>({ x: 20, y: 20 });
+  const [navbarPos, setNavbarPos] = useState<Position>({
+    x: place.x,
+    y: place.y,
+  });
   const [currentPage, setCurrentPage] = useState<string>("home");
 
-  const resetNavbar = () => setNavbarPos({ x: 20, y: 20 });
-
+  const resetNavbar = () => setNavbarPos({ x: place.x, y: place.y });
+  const handleClick = (e) => {
+    // e.preventDefault();
+    console.log(e, e.target.id)
+    setCurrentPage(e.target.id)
+  }
   return (
     <>
       <Rnd
@@ -37,33 +48,34 @@ export default function NavBar() {
         onDragStop={(_, d) => setNavbarPos({ x: d.x, y: d.y })}
         enableResizing={false}
         bounds="window"
-        style={{ zIndex: 100, paddingVertical: 10 }}
+        style={{ zIndex: 100, position: "fixed", paddingTop: 10, paddingBottom: 10 }}
       >
-        <div className="flex flex-col items-center gap-2 bg-white/95 backdrop-blur-sm border border-gray-300 rounded-lg px-4 py-3 shadow-xl hover:shadow-2xl transition-shadow duration-200">
+        <div className="flex flex-col items-center gap-2 bg-white/95 backdrop-blur-sm border border-green-500 rounded-lg px-4 py-3 shadow-xl hover:shadow-2xl transition-shadow duration-200">
+          <div className="font-semibold text-black">
+            Ankur Singh / FullStack Developer
+          </div>
           {/* Row 1: Navigation + Reset/Menu */}
           <div className="flex items-center justify-between w-full gap-4">
             {/* Left: Navigation Links */}
             <div className="flex gap-2">
               {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentPage(item.id);
-                  }}
-                  className={`px-3 py-1.5 text-sm rounded-md transition ${
-                    currentPage === item.id
+                <Link href={item.href} key={item.id}>
+                  <button
+                    id={item.id}
+                    onClick={handleClick}
+                    className={`px-3 py-1.5 text-sm rounded-md transition ${currentPage === item.id
                       ? "bg-black text-white hover:bg-blue-950"
                       : "bg-transparent text-gray-700 hover:bg-gray-100"
-                  }`}
-                >
-                  {item.label}
-                </button>
+                      }`}
+                  >
+                    {item.label}
+                  </button>
+                </Link>
               ))}
             </div>
 
             {/* Right: Reset + Menu */}
-            <div className="flex items-center gap-2 text-gray-300 hover:text-gray-400 absolute right-1 bottom-1">
+            <div className="flex items-center gap-2 text-gray-300 hover:text-gray-400 absolute right-1 top-1">
               <button
                 onClick={resetNavbar}
                 className="p-1 rounded-full hover:bg-gray-100 transition"
