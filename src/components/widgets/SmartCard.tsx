@@ -16,6 +16,7 @@ import {
     ExternalLink,
     MailIcon,
     Move,
+    SendIcon,
 } from "lucide-react";
 import { Rnd } from "react-rnd";
 import { useLayerManager } from "@/customContext/LayerContext";
@@ -223,8 +224,8 @@ export default function SmartCard({
 
                             <button
                                 type="submit"
-                                className="mt-auto bg-black hover:bg-blue-950 text-white text-sm rounded py-2"
-                            >
+                                className="mt-auto bg-black hover:bg-blue-950 text-white text-sm rounded py-2 flex items-center justify-center gap-2 select-none"
+                            >   <SendIcon className="w-4 h-4" />
                                 Send Message
                             </button>
                         </form>
@@ -290,7 +291,7 @@ export default function SmartCard({
             <div className="relative h-full w-full p-4 pt-1 flex flex-col">
                 <div className="flex justify-between items-center">
                     <div className="">
-                        <button className="move-handle hover:bg-gray-300 text-gray-500 aspect-square rounded-lg p-1 flex justify-center items-center">
+                        <button className="move-handle cursor-grab active:cursor-grabbing hover:bg-gray-300 text-gray-500 aspect-square rounded-lg p-1 flex justify-center items-center">
                             <Move size={16} />
                         </button>
                     </div>

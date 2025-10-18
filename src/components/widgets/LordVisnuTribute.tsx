@@ -56,7 +56,7 @@ export default function LordVisnuTribute({
     <div style={style}>
       {/* Tribute Bar */}
       <div
-        className="w-fit p-5 text-white flex items-center justify-center rounded-lg absolute cursor-none relative overflow-hidden"
+        className="w-fit p-5 text-white flex items-center justify-center rounded-lg  cursor-none relative overflow-hidden"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavBarNew from "@/components/widgets/NavBarNew";
 import BackgroundGrid from "@/components/BackgroundGrid";
+import Heighlighter from "@/components/widgets/Heighlighter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
         <BackgroundGrid>
           <NavBarNew />
           {children}
+          <Heighlighter />
         </BackgroundGrid>
       </body>
     </html>

@@ -30,7 +30,7 @@ export default function NavBar() {
   const [currentPage, setCurrentPage] = useState<string>("home");
 
   const resetNavbar = () => setNavbarPos({ x: place.x, y: place.y });
-  const handleClick = (e) => {
+  const handleClick = (e: any) => {
     // e.preventDefault();
     console.log(e, e.target.id)
     setCurrentPage(e.target.id)
