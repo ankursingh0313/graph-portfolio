@@ -1,25 +1,25 @@
 "use client";
-import { Check, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { Check } from "lucide-react";
 
 export default function Heighlighter() {
     const [selectedColor, setSelectedColor] = useState("#ffff00");
-    const [expanded, setExpanded] = useState(false);
     const [isActive, setIsActive] = useState(false);
+    const [expanded, setExpanded] = useState(false);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
     const drawing = useRef(false);
 
     const colors = ["#e3ff00", "#56ff00", "#00f9ff", "#ff00db", "#bd00ff"];
 
-    // Initialize canvas size and context
+    // Setup canvas
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
-            canvas.height = document.body.scrollHeight; // only height changes
+            canvas.height = document.body.scrollHeight;
         };
         resizeCanvas();
         window.addEventListener("resize", resizeCanvas);
@@ -30,7 +30,7 @@ export default function Heighlighter() {
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
             ctx.lineWidth = 20;
-            ctx.globalAlpha = 0.3; // translucent highlighter effect
+            ctx.globalAlpha = 0.3;
             ctxRef.current = ctx;
         }
 
@@ -40,7 +40,7 @@ export default function Heighlighter() {
         };
     }, []);
 
-    // Handle drawing
+    // Drawing logic
     useEffect(() => {
         if (!isActive) return;
 
@@ -48,8 +48,7 @@ export default function Heighlighter() {
         const ctx = ctxRef.current;
         if (!canvas || !ctx) return;
 
-        const getY = (clientY: number) =>
-            clientY + window.scrollY; // adjust for scrolling
+        const getY = (clientY: number) => clientY + window.scrollY;
 
         const start = (e: MouseEvent) => {
             drawing.current = true;
@@ -80,10 +79,7 @@ export default function Heighlighter() {
         };
     }, [isActive, selectedColor]);
 
-    const toggleExpanded = () => setExpanded((prev) => !prev);
-    const toggleActive = () => setIsActive((prev) => !prev);
-
-    // Escape key to disable highlighter
+    // Escape disables drawing
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
             if (e.key === "Escape") setIsActive(false);
@@ -92,9 +88,11 @@ export default function Heighlighter() {
         return () => window.removeEventListener("keydown", handleKey);
     }, []);
 
+    const toggleBrush = () => setIsActive((prev) => !prev);
+    const toggleColors = () => setExpanded((prev) => !prev);
+
     return (
         <>
-            {/* Canvas overlay for drawing */}
             {isActive && (
                 <canvas
                     ref={canvasRef}
@@ -111,12 +109,23 @@ export default function Heighlighter() {
                 className={`fixed bottom-10 right-10 flex flex-col p-2 items-center justify-center gap-2 bg-white/95 backdrop-blur-sm border border-green-500 rounded-lg shadow-xl transition-all duration-300 z-[1000] ${expanded ? "shadow-2xl scale-105" : "shadow-md scale-100"
                     }`}
             >
+                {/* Highlighter status */}
                 {expanded && (
-                    <div className="cursor-pointer text-black text-sm font-medium mb-1 flex flex-row items-center" onClick={toggleActive}>
-                        {isActive ? <>Highlighter<Check size={16} /></> : <>Highlighter</>}
+                    <div
+                        className="cursor-pointer text-black text-sm font-medium mb-1 flex flex-row items-center"
+                        onClick={toggleBrush}
+                    >
+                        {isActive ? (
+                            <>
+                                Highlighter Active <Check size={16} className="ml-1 text-green-600" />
+                            </>
+                        ) : (
+                            <>Highlighter</>
+                        )}
                     </div>
                 )}
 
+                {/* Color Picker */}
                 {expanded && (
                     <div className="flex flex-row gap-1 mb-1">
                         {colors.map((color) => (
@@ -133,23 +142,21 @@ export default function Heighlighter() {
                     </div>
                 )}
 
-                {expanded && (
-                    <button
-                        onClick={toggleActive}
-                        className={`px-3 py-1 text-sm rounded-md font-medium border ${isActive
-                            ? "bg-green-500 text-white border-green-600"
-                            : "bg-white text-gray-700 border-gray-400"
-                            } transition-colors`}
-                    >
-                        {isActive ? "Active ✓" : "Activate"}
-                    </button>
-                )}
+                {/* Bottom Row */}
+                <div className="flex justify-between items-center w-full">
+                    {/* Color toggle box */}
+                    <div
+                        onClick={toggleColors}
+                        className="h-5 w-5 rounded-sm shadow border border-gray-400 cursor-pointer hover:scale-110 transition-transform"
+                        style={{ backgroundColor: selectedColor }}
+                    ></div>
 
-                <div
-                    className="flex justify-center cursor-pointer"
-                    onClick={toggleExpanded}
-                >
-                    <div className="w-5 h-5 text-gray-500">
+                    {/* Brush icon */}
+                    <div
+                        className={`w-5 h-5 cursor-pointer transition-transform ${isActive ? "scale-110" : "opacity-80"
+                            }`}
+                        onClick={toggleBrush}
+                    >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 77" fill="none">
                             <g id="heighlighter">
                                 <path
@@ -164,7 +171,7 @@ export default function Heighlighter() {
                                 <path
                                     id="handle"
                                     d="M84.5 36.5L61 59.5H52L29 36.5V28L52 5.5"
-                                    stroke="#6a7282"
+                                    stroke={isActive ? "#16a34a" : "#6a7282"}
                                     strokeWidth="10"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"

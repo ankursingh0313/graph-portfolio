@@ -17,6 +17,7 @@ import {
     MailIcon,
     Move,
     SendIcon,
+    Pin,
 } from "lucide-react";
 import { Rnd } from "react-rnd";
 import { useLayerManager } from "@/customContext/LayerContext";
@@ -292,7 +293,7 @@ export default function SmartCard({
                 <div className="flex justify-between items-center">
                     <div className="">
                         <button className="move-handle cursor-grab active:cursor-grabbing hover:bg-gray-300 text-gray-500 aspect-square rounded-lg p-1 flex justify-center items-center">
-                            <Move size={16} />
+                            <Pin size={16} className="rotate-45" />
                         </button>
                     </div>
                     <div className="flex gap-1">
