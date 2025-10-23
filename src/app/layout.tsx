@@ -5,6 +5,7 @@ import "./globals.css";
 import NavBarNew from "@/components/widgets/NavBarNew";
 import BackgroundGrid from "@/components/BackgroundGrid";
 import Heighlighter from "@/components/widgets/Heighlighter";
+import ClientOnly from "@/components/utils/ClientOnly";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,12 +40,13 @@ export default function RootLayout({
           `,
           backgroundSize: "20px 20px",
         }}
-      >
-        <BackgroundGrid>
-          <NavBarNew />
-          {children}
-          <Heighlighter />
-        </BackgroundGrid>
+      > <ClientOnly>
+          <BackgroundGrid>
+            <NavBarNew />
+            {children}
+            <Heighlighter />
+          </BackgroundGrid>
+        </ClientOnly>
       </body>
     </html>
   );

@@ -61,7 +61,7 @@ export default function LordVisnuTribute({
         onMouseLeave={handleMouseLeave}
         style={{
           background:
-            "radial-gradient(ellipse at center, #ccc8, #ccc5, #ccc0, #ccc0);",
+            "radial-gradient(ellipse at center, #ccc8, #ccc5, #ccc0, #ccc0)",
           cursor: "url(praying.png) 16 0, pointer",
         }}
       >
@@ -70,7 +70,7 @@ export default function LordVisnuTribute({
           src="./LordVisnuTilak.svg"
           className="h-[30px] mr-2"
           style={{
-            background: "radial-gradient(ellipse at center, #ccc8, #ccc0);",
+            background: "radial-gradient(ellipse at center, #ccc8, #ccc0)",
           }}
         />
         <span className="font-semibold self-center text-sm">
