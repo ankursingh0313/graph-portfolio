@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+// @ts-ignore - allow importing global CSS without a dedicated type declaration
 import "./globals.css";
 import NavBarNew from "@/components/widgets/NavBarNew";
 import BackgroundGrid from "@/components/BackgroundGrid";

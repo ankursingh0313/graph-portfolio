@@ -115,6 +115,7 @@ export default function SmartCard({
     const [colorClass] = useState(colorHoverClasses[color]);
     const { bringForward, sendBackward, getZIndex, registerCard } = useLayerManager();
     const [id] = useState(() => Math.random().toString(36).slice(2));
+    const [slecting, setSelecting] = useState(false);
 
     // Register card once
     useEffect(() => {
@@ -131,12 +132,39 @@ export default function SmartCard({
             document.documentElement.style.overflowX = "hidden";
         }
     };
+    const handleSelection = () => {
+        const selection = window.getSelection();
+        if (selection && !selection.isCollapsed) { // Check if text is actually selected
+            const range = selection.getRangeAt(0);
+            const selectedText = range.toString();
 
+            // Create a new <b> element
+            const cTag = document.createElement('c');
+            cTag.style.backgroundColor = "#fff085";
+            cTag.textContent = selectedText;
+
+            // Replace the selected text with the new <b> element
+            range.deleteContents();
+            range.insertNode(cTag);
+
+            // Clear the selection
+            selection.removeAllRanges();
+        }
+    };
     const renderContent = () => {
         switch (type) {
             case "text":
             case "sticky":
-                return <p className="text-gray-700 text-base whitespace-pre-line select-none">{content}</p>;
+                return (<><style>{`
+        .dynamic-selection::selection {
+          background-color: #fff085;
+        }
+      `}</style><p className="text-gray-700 text-base whitespace-pre-line dynamic-selection" onMouseUp={handleSelection} style={{
+                        userSelect: "text",
+                        WebkitUserSelect: "text",
+                        MozUserSelect: "text",
+                        msUserSelect: "text",
+                    }}>{content}</p></>);
 
             case "image":
                 return (

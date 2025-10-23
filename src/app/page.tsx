@@ -42,22 +42,24 @@ export default function Home() {
   return (
     <LayerProvider>
       {/* Example movable + resizable component */}
-      <ImageCard
+      <SmartCard
         x={873}
         y={135}
         height={520}
         width={390}
+        type="image"
         color="red"
         title="That's Me!"
         imageUrl="./images/profile.jpeg"
-        alt="Ankur Singh"
+        // alt="Ankur Singh"
         caption="Always ready to tackle new chalanges!"
       />
-      <TextCard
+      <SmartCard
         x={280}
         y={170}
         height={160}
         width={560}
+        type="text"
         content={
           "Hi, I'm a Full Stack Developer passionate about creating amazing web experiences.\n I love building interactive applications and exploring new technologies. Currently focused on React, TypeScript, and modern web development."
         }
