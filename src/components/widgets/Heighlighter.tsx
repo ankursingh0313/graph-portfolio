@@ -1,11 +1,16 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 
 export default function Heighlighter() {
     const [selectedColor, setSelectedColor] = useState("#ffff00");
-    const [isActive, setIsActive] = useState(false);
+
+    // Unified state rule:
+    // expanded === true → highlighter is active
+    // expanded === false → highlighter turns off
     const [expanded, setExpanded] = useState(false);
+    const isActive = expanded;
+
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
     const drawing = useRef(false);
@@ -79,17 +84,18 @@ export default function Heighlighter() {
         };
     }, [isActive, selectedColor]);
 
-    // Escape disables drawing
+    // Escape closes the toolbox (collapses)
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
-            if (e.key === "Escape") setIsActive(false);
+            if (e.key === "Escape") setExpanded(false);
         };
         window.addEventListener("keydown", handleKey);
         return () => window.removeEventListener("keydown", handleKey);
     }, []);
 
-    const toggleBrush = () => setIsActive((prev) => !prev);
-    const toggleColors = () => setExpanded((prev) => !prev);
+    const toggleExpand = () => {
+        setExpanded((prev) => !prev);
+    };
 
     return (
         <>
@@ -106,80 +112,51 @@ export default function Heighlighter() {
 
             {/* Floating Tool */}
             <div
-                className={`fixed bottom-10 right-10 flex flex-col p-2 items-center justify-center gap-2 bg-white/95 backdrop-blur-sm border border-green-500 rounded-lg shadow-xl transition-all duration-300 z-[1000] ${expanded ? "shadow-2xl scale-105" : "shadow-md scale-100"
+                className={`fixed bottom-10 right-10 flex flex-col items-center p-3 bg-white/95 backdrop-blur-sm border border-green-600 rounded-lg shadow-xl transition-all duration-300 z-[1000] ${expanded ? "w-32 shadow-2xl scale-105" : "w-10 h-10 scale-100"
                     }`}
             >
-                {/* Highlighter status */}
+                {/* Collapse Button (X) */}
                 {expanded && (
-                    <div
-                        className="cursor-pointer text-black text-sm font-medium mb-1 flex flex-row items-center"
-                        onClick={toggleBrush}
+                    <button
+                        onClick={() => setExpanded(false)}
+                        className="absolute top-1 right-1 text-gray-700 hover:text-red-600"
                     >
-                        {isActive ? (
-                            <>
-                                Highlighter Active <Check size={16} className="ml-1 text-green-600" />
-                            </>
-                        ) : (
-                            <>Highlighter</>
-                        )}
-                    </div>
+                        <X size={16} />
+                    </button>
                 )}
 
-                {/* Color Picker */}
+                {/* Expanded UI */}
                 {expanded && (
-                    <div className="flex flex-row gap-1 mb-1">
-                        {colors.map((color) => (
-                            <div
-                                key={color}
-                                onClick={() => setSelectedColor(color)}
-                                className={`h-4 w-4 rounded-sm shadow border border-gray-400 cursor-pointer hover:scale-110 transition-transform ${selectedColor === color
-                                    ? "ring-2 ring-offset-1 ring-gray-500"
-                                    : ""
-                                    }`}
-                                style={{ backgroundColor: color }}
-                            ></div>
-                        ))}
-                    </div>
+                    <>
+                        {/* Highlighter Label */}
+                        <div className="cursor-pointer text-black text-sm font-medium mb-2 flex items-center">
+                            Highlighter Active
+                            <Check size={14} className="ml-1 text-green-600" />
+                        </div>
+
+                        {/* Color Picker */}
+                        <div className="flex flex-row gap-1 mb-2">
+                            {colors.map((color) => (
+                                <div
+                                    key={color}
+                                    onClick={() => setSelectedColor(color)}
+                                    className={`h-4 w-4 rounded-sm shadow border border-gray-400 cursor-pointer hover:scale-110 transition-transform ${selectedColor === color ? "ring-2 ring-offset-1 ring-gray-600" : ""
+                                        }`}
+                                    style={{ backgroundColor: color }}
+                                ></div>
+                            ))}
+                        </div>
+                    </>
                 )}
 
-                {/* Bottom Row */}
-                <div className="flex justify-between items-center w-full">
-                    {/* Color toggle box */}
+                {/* Collapsed Color Button */}
+                {!expanded && (
                     <div
-                        onClick={toggleColors}
-                        className="h-5 w-5 rounded-sm shadow border border-gray-400 cursor-pointer hover:scale-110 transition-transform"
+                        onClick={toggleExpand}
+                        className="h-5 w-5 rounded-sm shadow border border-gray-400 cursor-pointer"
                         style={{ backgroundColor: selectedColor }}
                     ></div>
-
-                    {/* Brush icon */}
-                    <div
-                        className={`w-5 h-5 cursor-pointer transition-transform ${isActive ? "scale-110" : "opacity-80"
-                            }`}
-                        onClick={toggleBrush}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 77" fill="none">
-                            <g id="heighlighter">
-                                <path
-                                    id="brush"
-                                    d="M5 59.5L29 36.5L52 59.5L41.5 72H5V59.5Z"
-                                    fill={selectedColor}
-                                    stroke={selectedColor}
-                                    strokeWidth="10"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                                <path
-                                    id="handle"
-                                    d="M84.5 36.5L61 59.5H52L29 36.5V28L52 5.5"
-                                    stroke={isActive ? "#16a34a" : "#6a7282"}
-                                    strokeWidth="10"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                            </g>
-                        </svg>
-                    </div>
-                </div>
+                )}
             </div>
         </>
     );
